@@ -77,3 +77,38 @@ public class HashTable
         return hash;
     }
 }
+
+class Node
+{
+    private String string;
+    private AtomicInteger integer;
+    private Node next;
+
+    public Node(String string, AtomicInteger integer)
+    {
+        this.string = string;
+        this.integer = integer;
+    }
+
+    public String getString()
+    {
+        return this.string;
+    }
+
+    public AtomicInteger getInteger()
+    {
+        return this.integer;
+    }
+
+    public Node getNext()
+    {
+        return this.next;
+    }
+
+    public void setNext(Node next)
+    {
+        this.next = next;
+    }
+
+
+}
