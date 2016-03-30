@@ -9,9 +9,15 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class HashTable
 {
+    //amount of items in the HashTable
+    private int currentSize = 0;
+
+    //internal array to hold Nodes
+    private Node[] nodes;
 
     public HashTable(int initialSize)
     {
+        this.nodes = new Node[initialSize];
         /*
            string s
            if map contain s
@@ -57,7 +63,7 @@ public class HashTable
      */
     public int size()
     {
-        return 0;
+        return this.currentSize;
     }
 
     /**
@@ -109,6 +115,4 @@ class Node
     {
         this.next = next;
     }
-
-
 }
