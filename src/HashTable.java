@@ -19,8 +19,12 @@ public class HashTable
     //internal array to hold Nodes
     private Node[] nodes;
 
-    public HashTable(int initialSize)
+    public HashTable(int initialSize) throws Exception
     {
+        if(initialSize <= 0)
+        {
+            throw new Exception("Initial size must be greater than 0");
+        }
         this.nodes = new Node[initialSize];
     }
 

@@ -7,7 +7,10 @@
  */
 public class MathUtils
 {
-    
+    public int getNextPrime(int num)
+    {
+        return 0;
+    }
     /**
      * Check if a number is prime or not
      * @param num
