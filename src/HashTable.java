@@ -42,6 +42,7 @@ public class HashTable
             //Make a new node
             this.nodes[index]=new Node(s,i);
             this.usedArraySpace++;
+            this.currentSize++;
         }
         else{
              while (node.getNext() != null){
@@ -51,6 +52,7 @@ public class HashTable
             //when next=null
             Node newNode =new Node(s,i);
             node.setNext(newNode);
+            this.currentSize++;
         }
 
         //Check to see if resizing is needed
@@ -58,6 +60,7 @@ public class HashTable
         if(usedArraySpace >= (int) (this.nodes.length * 0.75))
         {
             //Must resize array
+
         }
     }
 
@@ -136,11 +139,6 @@ public class HashTable
         }
 
         return hash;
-    }
-
-    private boolean isPrime(int num)
-    {
-        return false;
     }
 }
 
