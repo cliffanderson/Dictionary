@@ -1,4 +1,9 @@
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * Course: COMP 2071
@@ -9,17 +14,35 @@ import java.util.HashMap;
  */
 public class Main {
 
-    /** Testing the java HashMap. */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception{
+        HashMap<String, Integer> dups = new HashMap<String, Integer>();
+        BufferedReader reader = new BufferedReader(new FileReader(new File("C:/Users/lawrencew/Desktop/pokemon.txt")));
+        String line = "";
+        while((line = reader.readLine())!=null)
+        {
+            if(!dups.containsKey(line))
+            {
+                dups.put(line,1);
+            }
+            else
+            {
+                int total = dups.get(line);
+                dups.put(line,total);
+            }
+        }
+        printMap(dups);
 
-        HashMap<String, String> map = new HashMap<>();
-        map.put("Zetzra", "MODEL X101F563H1G");
-        System.out.println(map.get("Zetzra"));
-
-        System.out.println("Value: " + map.containsValue("MODEL X101F563H1G"));
-
-        System.out.println("Key: " + map.containsKey("Zetzra"));
-
-        System.out.println("Entry Set: " + map.entrySet());
     }
+    public static void printMap(Map mp) {
+        Iterator it = mp.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry)it.next();
+
+                System.out.println(pair.getKey() + " = " + pair.getValue());
+
+            it.remove(); // avoids a ConcurrentModificationException
+        }
+    }
+
+
 }
