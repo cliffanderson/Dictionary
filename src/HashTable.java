@@ -1,3 +1,4 @@
+import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -19,6 +20,9 @@ public class HashTable
     //internal array to hold Nodes
     private Node[] nodes;
 
+    //Internal iterator used to loop through
+    private HashMapIterator<AtomicInteger> iterator;
+
     public HashTable(int initialSize) throws Exception
     {
         if(initialSize <= 0)
@@ -26,6 +30,7 @@ public class HashTable
             throw new Exception("Initial size must be greater than 0");
         }
         this.nodes = new Node[initialSize];
+        this.iterator = new HashMapIterator<>();
     }
 
     /**
@@ -128,6 +133,10 @@ public class HashTable
         return this.currentSize;
     }
 
+    public Iterator<AtomicInteger> iterator() {
+        return iterator;
+    }
+
     /**
      * Get the hashcode of a string
      * @param s The string
@@ -144,37 +153,77 @@ public class HashTable
 
         return hash;
     }
-}
 
-class Node
-{
-    private String string;
-    private AtomicInteger integer;
-    private Node next;
+    /**
+     * WARNING - keySet() and values() need to be implemented before making this work properly.
+     * Iterators in a HashMap go through a "SET" of keys or/and values. They do not go through the internal array.
+     * I made it go through the internal array for now.
+     * */
+    private class HashMapIterator<T> implements Iterator<T> {
 
-    public Node(String string, AtomicInteger integer)
-    {
-        this.string = string;
-        this.integer = integer;
+        // index of next element to return
+        int cursor;
+
+        // index of last element returned; -1 if no such
+        int lastReturned;
+
+        HashMapIterator() {
+            cursor = 0;
+            lastReturned = -1;
+        }
+
+        @Override
+        public boolean hasNext() {
+            if (nodes[cursor] == null) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+
+        @Override
+        public T next() {
+            if (nodes[cursor] == null) {
+                cursor++;
+                return null;
+            } else {
+                T value = (T) nodes[cursor].getInteger();
+                cursor++;
+                return value;
+            }
+        }
     }
 
-    public String getString()
+    private class Node
     {
-        return this.string;
-    }
+        private String string;
+        private AtomicInteger integer;
+        private Node next;
 
-    public AtomicInteger getInteger()
-    {
-        return this.integer;
-    }
+        public Node(String string, AtomicInteger integer)
+        {
+            this.string = string;
+            this.integer = integer;
+        }
 
-    public Node getNext()
-    {
-        return this.next;
-    }
+        public String getString()
+        {
+            return this.string;
+        }
 
-    public void setNext(Node next)
-    {
-        this.next = next;
+        public AtomicInteger getInteger()
+        {
+            return this.integer;
+        }
+
+        public Node getNext()
+        {
+            return this.next;
+        }
+
+        public void setNext(Node next)
+        {
+            this.next = next;
+        }
     }
 }

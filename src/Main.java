@@ -60,6 +60,4 @@ public class Main {
             it.remove(); // avoids a ConcurrentModificationException
         }
     }
-
-
 }
