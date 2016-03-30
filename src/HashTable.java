@@ -28,7 +28,25 @@ public class HashTable
      */
     public void put(String s, AtomicInteger i)
     {
+        /*
+        if s exists in any node replace the value
+        else add new string/ int pair
+         */
+        int index = this.getStringHashCode(s)%this.nodes.length;
+        Node node = this.nodes[index];
 
+        if (node == null){
+            this.nodes[index]=new Node(s,i);
+        }
+        else{
+             while (node.getNext() != null){
+                 node = node.getNext();
+             }
+
+            //when next=null
+            Node newNode =new Node(s,i);
+            node.setNext(newNode);
+        }
     }
 
     /**
@@ -38,7 +56,7 @@ public class HashTable
      */
     public boolean containsKey(String s)
     {
-        return false;
+        return this.get(s) != null;
     }
 
     /**
@@ -49,7 +67,7 @@ public class HashTable
     public AtomicInteger get(String s) throws NoSuchElementException
     {
         //First check and see if there is a node at index hashcode(s)
-        int index = this.getStringHashCode(s);
+        int index = this.getStringHashCode(s) % this.nodes.length;
         if(this.nodes[index] == null)
         {
             return null;
