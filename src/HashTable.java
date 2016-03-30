@@ -1,5 +1,4 @@
-import java.util.Iterator;
-import java.util.NoSuchElementException;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -133,8 +132,44 @@ public class HashTable
         return this.currentSize;
     }
 
+    /**
+     * Returns a iterator to the internal node array.
+     * @return
+     */
     public Iterator<AtomicInteger> iterator() {
         return iterator;
+    }
+
+    public ArrayList<AtomicInteger> values() {
+        return null;
+    }
+
+    /**
+     * keySet() returns a HashSet of all the keys in the HashTable.
+     * The HashSet can be used to get get a iterator to work with the keys in whatever way is needed.
+     * @return a HashSet of all the keys.
+     * */
+    public HashSet<String> keySet() {
+
+        HashSet<String> arrayList = new HashSet<>();
+
+        int numLeft = nodes.length;
+
+        for (int i = 0; i < numLeft; numLeft--, i++) {
+            if (nodes[i] != null) {
+                arrayList.add(nodes[i].getString());
+                numLeft--;
+
+                Node nextNode = nodes[i].getNext();
+                while (nextNode != null) {
+                    arrayList.add(nextNode.getString());
+                    nextNode = nextNode.getNext();
+                    numLeft--;
+                }
+            }
+        }
+
+        return arrayList;
     }
 
     /**
@@ -199,6 +234,12 @@ public class HashTable
         private String string;
         private AtomicInteger integer;
         private Node next;
+
+        public Node() {
+            next = null;
+            string = null;
+            integer = null;
+        }
 
         public Node(String string, AtomicInteger integer)
         {
