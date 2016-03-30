@@ -1,3 +1,4 @@
+import java.util.NoSuchElementException;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -52,9 +53,33 @@ public class HashTable
      * @param s The key
      * @return The value
      */
-    public AtomicInteger get(String s)
+    public AtomicInteger get(String s) throws NoSuchElementException
     {
-        return null;
+        //First check and see if there is a node at index hashcode(s)
+        int index = this.getStringHashCode(s);
+        if(this.nodes[index] == null)
+        {
+            return null;
+        }
+
+        //Search through this chain of nodes looking for the string s
+        Node node = this.nodes[index];
+        while(node != null)
+        {
+            if(node.getString().equals(s))
+            {
+                //Found it
+                return node.getInteger();
+            }
+            else
+            {
+                //Go to next node
+                node = node.getNext();
+            }
+        }
+
+        //We never found it
+        throw new NoSuchElementException("Could not find integer for string: " + s);
     }
 
     /**
