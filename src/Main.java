@@ -14,6 +14,13 @@ import java.util.Map;
  */
 public class Main {
 
+    /**
+     * the main method
+     * reads in every line from a given text file then adds the line to a hashmap
+     * if the line already exists in the hashmap then it increments the lines value by 1
+     * @param args
+     * @throws Exception
+     */
     public static void main(String[] args) throws Exception{
         HashMap<String, Integer> dups = new HashMap<String, Integer>();
         BufferedReader reader = new BufferedReader(new FileReader(new File("resources/testFile.txt")));
@@ -34,6 +41,12 @@ public class Main {
         printMap(dups);
 
     }
+
+    /**
+     * iterates through a hashmap passed to it
+     * prints out each entry as long as its value does not equal 1
+     * @param mp
+     */
     public static void printMap(Map mp) {
         Iterator it = mp.entrySet().iterator();
         while (it.hasNext()) {
