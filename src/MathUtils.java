@@ -7,7 +7,7 @@
  */
 public class MathUtils
 {
-    public
+    
     /**
      * Check if a number is prime or not
      * @param num
