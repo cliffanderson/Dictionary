@@ -19,13 +19,6 @@ public class HashTable
     public HashTable(int initialSize)
     {
         this.nodes = new Node[initialSize];
-        /*
-           string s
-           if map contain s
-                get(s).increment()
-           else
-                map.put(s, new AtomicInteger(1)
-            */
     }
 
     /**
