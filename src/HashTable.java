@@ -56,7 +56,7 @@ public class HashTable
      */
     public boolean containsKey(String s)
     {
-        return false;
+        return this.get(s) != null;
     }
 
     /**
@@ -67,7 +67,7 @@ public class HashTable
     public AtomicInteger get(String s) throws NoSuchElementException
     {
         //First check and see if there is a node at index hashcode(s)
-        int index = this.getStringHashCode(s);
+        int index = this.getStringHashCode(s) % this.nodes.length;
         if(this.nodes[index] == null)
         {
             return null;
