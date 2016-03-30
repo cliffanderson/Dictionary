@@ -16,7 +16,7 @@ public class Main {
 
     public static void main(String[] args) throws Exception{
         HashMap<String, Integer> dups = new HashMap<String, Integer>();
-        BufferedReader reader = new BufferedReader(new FileReader(new File("C:/Users/lawrencew/Desktop/pokemon.txt")));
+        BufferedReader reader = new BufferedReader(new FileReader(new File("resources/testFile.txt")));
         String line = "";
         while((line = reader.readLine())!=null)
         {
@@ -27,6 +27,7 @@ public class Main {
             else
             {
                 int total = dups.get(line);
+                total++;
                 dups.put(line,total);
             }
         }
@@ -37,8 +38,11 @@ public class Main {
         Iterator it = mp.entrySet().iterator();
         while (it.hasNext()) {
             Map.Entry pair = (Map.Entry)it.next();
-
+            if(!pair.getValue().equals(1))
+            {
                 System.out.println(pair.getKey() + " = " + pair.getValue());
+            }
+
 
             it.remove(); // avoids a ConcurrentModificationException
         }
