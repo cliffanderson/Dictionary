@@ -13,6 +13,9 @@ public class HashTable
     //amount of items in the HashTable
     private int currentSize = 0;
 
+    //Used array space
+    private int usedArraySpace = 0;
+
     //internal array to hold Nodes
     private Node[] nodes;
 
@@ -36,7 +39,9 @@ public class HashTable
         Node node = this.nodes[index];
 
         if (node == null){
+            //Make a new node
             this.nodes[index]=new Node(s,i);
+            this.usedArraySpace++;
         }
         else{
              while (node.getNext() != null){
@@ -47,6 +52,13 @@ public class HashTable
             Node newNode =new Node(s,i);
             node.setNext(newNode);
         }
+
+        //Check to see if resizing is needed
+        //Used array space must not exceed 75% of the array length
+        if(usedArraySpace >= (int) (this.nodes.length * 0.75))
+        {
+            //Must resize array
+        }
     }
 
     /**
@@ -56,7 +68,14 @@ public class HashTable
      */
     public boolean containsKey(String s)
     {
-        return this.get(s) != null;
+        try
+        {
+            return this.get(s) != null;
+        }
+        catch (NoSuchElementException e)
+        {
+            return false;
+        }
     }
 
     /**
@@ -107,7 +126,7 @@ public class HashTable
      * @param s The string
      * @return The hashcode
      */
-    int getStringHashCode(String s)
+    private int getStringHashCode(String s)
     {
         int hash = 0;
 
@@ -117,6 +136,11 @@ public class HashTable
         }
 
         return hash;
+    }
+
+    private boolean isPrime(int num)
+    {
+        return false;
     }
 }
 
