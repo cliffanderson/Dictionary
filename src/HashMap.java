@@ -8,9 +8,9 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Group members: Tom Plano, Cliff Anderson, Will Lawrence, Artur Janowiec
  * Due date: 4/6/16
  */
-public class HashTable
+public class HashMap
 {
-    //amount of items in the HashTable
+    //amount of items in the HashMap
     private int currentSize = 0;
 
     //Used array space
@@ -22,7 +22,7 @@ public class HashTable
     //Internal iterator used to loop through
     private HashMapIterator<AtomicInteger> iterator;
 
-    public HashTable(int initialSize) throws Exception
+    public HashMap(int initialSize) throws Exception
     {
         if(initialSize <= 0)
         {
@@ -33,7 +33,7 @@ public class HashTable
     }
 
     /**
-     * Add a new entry to the HashTable. If the entry already exists, replace the value
+     * Add a new entry to the HashMap. If the entry already exists, replace the value
      * @param s the String
      * @param i the value
      */
@@ -145,7 +145,7 @@ public class HashTable
     }
 
     /**
-     * keySet() returns a HashSet of all the keys in the HashTable.
+     * keySet() returns a HashSet of all the keys in the HashMap.
      * The HashSet can be used to get get a iterator to work with the keys in whatever way is needed.
      * @return a HashSet of all the keys.
      * */

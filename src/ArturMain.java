@@ -1,8 +1,5 @@
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Set;
-import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -14,21 +11,21 @@ public class ArturMain {
 
         long startTime = System.currentTimeMillis();
 
-        HashTable hashTable = new HashTable(100002);
+        HashMap hashMap = new HashMap(100002);
 
-        hashTable.put("deed", new AtomicInteger(2));
-        hashTable.put("Artur", new AtomicInteger(3));
+        hashMap.put("deed", new AtomicInteger(2));
+        hashMap.put("Artur", new AtomicInteger(3));
 
         for (int i = 0; i < 100000; i++) {
-            hashTable.put("key: " + i, new AtomicInteger((i * 100) % 10));
+            hashMap.put("key: " + i, new AtomicInteger((i * 100) % 10));
         }
 
-        System.out.println("Size: " + hashTable.size());
-        System.out.println("Value when key = \"Artur\": " + hashTable.get("Artur"));
-        System.out.println("Is the key \"Artur\" in the table: " + hashTable.containsKey("Artur"));
-        System.out.println("Key 5000 is in table? " + hashTable.containsKey("key: 5000"));
+        System.out.println("Size: " + hashMap.size());
+        System.out.println("Value when key = \"Artur\": " + hashMap.get("Artur"));
+        System.out.println("Is the key \"Artur\" in the table: " + hashMap.containsKey("Artur"));
+        System.out.println("Key 5000 is in table? " + hashMap.containsKey("key: 5000"));
 
-        //Iterator iterator = hashTable.iterator();
+        //Iterator iterator = hashMap.iterator();
 
         /*
         System.out.println(iterator.hasNext());
@@ -63,7 +60,7 @@ public class ArturMain {
 
         */
 
-        Iterator ourIterator = hashTable.keySet().iterator();
+        Iterator ourIterator = hashMap.keySet().iterator();
 
         while (ourIterator.hasNext()) {
             System.out.println(ourIterator.next());
