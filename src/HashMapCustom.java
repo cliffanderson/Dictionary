@@ -1,3 +1,4 @@
+import javax.xml.crypto.NodeSetData;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -8,9 +9,9 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Group members: Tom Plano, Cliff Anderson, Will Lawrence, Artur Janowiec
  * Due date: 4/6/16
  */
-public class HashMap
+public class HashMapCustom
 {
-    //amount of items in the HashMap
+    //amount of items in the HashMapCustom. Keep in mind that a single array spot can hold many items.
     private int currentSize = 0;
 
     //Used array space
@@ -19,7 +20,7 @@ public class HashMap
     //internal array to hold Nodes
     private Node[] nodes;
 
-    public HashMap(int initialSize) throws Exception
+    public HashMapCustom(int initialSize) throws Exception
     {
         if(initialSize <= 0)
         {
@@ -29,7 +30,7 @@ public class HashMap
     }
 
     /**
-     * Add a new entry to the HashMap. If the entry already exists, replace the value
+     * Add a new entry to the HashMapCustom. If the entry already exists, replace the value
      * @param s the String
      * @param i the value
      */
@@ -129,7 +130,7 @@ public class HashMap
     }
 
     /**
-     * keySet() returns a HashSet of all the keys in the HashMap.
+     * keySet() returns a HashSet of all the keys in the HashMapCustom.
      * The HashSet can be used to get get an iterator to work with the keys in whatever way is needed.
      * @return a HashSet of all the keys.
      * */
@@ -157,7 +158,7 @@ public class HashMap
     }
 
     /**
-     * values() returns a linked list of all the values in the HashMap.
+     * values() returns a linked list of all the values in the HashMapCustom.
      * The linked list can be used to get an iterator to work with the values in whatever way is needed.
      * @return a linked list of all the values.
      */
@@ -181,7 +182,13 @@ public class HashMap
             }
         }
 
-        return null;
+        return linkedList;
+    }
+
+    public void clear() {
+        nodes = new Node[10];
+        currentSize = 0;
+        usedArraySpace = 0;
     }
 
     /**

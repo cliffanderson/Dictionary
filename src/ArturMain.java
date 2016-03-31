@@ -9,12 +9,13 @@ public class ArturMain {
 
     public static void main(String[] args) throws Exception {
 
-        HashMap hashMap = new HashMap(100002);
+        HashMapCustom hashMap = new HashMapCustom(10002);
 
         hashMap.put("deed", new AtomicInteger(2));
         hashMap.put("Artur", new AtomicInteger(3));
 
-        for (int i = 0; i < 100000; i++) {
+        //Place data into hashMap.
+        for (int i = 0; i < 10000; i++) {
             hashMap.put("key: " + i, new AtomicInteger((i * 100) % 7));
         }
 
@@ -23,52 +24,30 @@ public class ArturMain {
         System.out.println("Is the key \"Artur\" in the table: " + hashMap.containsKey("Artur"));
         System.out.println("Key 5000 is in table? " + hashMap.containsKey("key: 5000"));
 
-        //Iterator iterator = hashMap.iterator();
-
-        /*
-        System.out.println(iterator.hasNext());
-        System.out.println(iterator.next());
-        System.out.println(iterator.hasNext());
-        System.out.println(iterator.next());
-        */
-
-        /*
-        while (true) {
-            System.out.println(iterator.hasNext());
-            System.out.println(iterator.next());
-
-            Thread.sleep(2000);
-        }
-        */
-
-        /*
-        ArrayList<String> arrayList = new ArrayList<>();
-        Iterator iterator = arrayList.iterator();
-        iterator.hasNext();
-        */
-
-        /*
-        HashMap<String, String> hashMap = new HashMap<>();
-        hashMap.put("Artur", "Best Student");
-        Set<String> set = hashMap.keySet();
-        Iterator iterator = set.iterator();
-
-        System.out.println(iterator.hasNext());
-        System.out.println(iterator.next());
-
-        */
-
+        //Start log time.
         long startTime = System.currentTimeMillis();
 
-        Iterator valueIterator = hashMap.values().iterator();
+        //The iterators
         Iterator keyIterator = hashMap.keySet().iterator();
+        Iterator valueIterator = hashMap.values().iterator();
 
-        while (valueIterator.hasNext() && keyIterator.hasNext()) {
-            System.out.println((keyIterator.next()) + ", value: " + (valueIterator.next()));
+        /*
+        while (keyIterator.hasNext() && valueIterator.hasNext()) {
+            System.out.println(keyIterator.next() + ", value: " + valueIterator.next());
         }
+        */
 
-
+        //End log time.
         long endTime = System.currentTimeMillis();
+
+        //Testing clear
+        hashMap.clear();
+
+        System.out.println("Is Artur key in hashMap now: " + hashMap.containsKey("Artur"));
+
+        System.out.println(keyIterator.next());
+        //So the iterator doesn't update if the hashMap is cleared.
+        //Why does this happen?
 
         System.out.println("Time taken in milliseconds: " + (endTime - startTime));
     }
