@@ -9,15 +9,13 @@ public class ArturMain {
 
     public static void main(String[] args) throws Exception {
 
-        long startTime = System.currentTimeMillis();
-
         HashMap hashMap = new HashMap(100002);
 
         hashMap.put("deed", new AtomicInteger(2));
         hashMap.put("Artur", new AtomicInteger(3));
 
         for (int i = 0; i < 100000; i++) {
-            hashMap.put("key: " + i, new AtomicInteger((i * 100) % 10));
+            hashMap.put("key: " + i, new AtomicInteger((i * 100) % 7));
         }
 
         System.out.println("Size: " + hashMap.size());
@@ -60,11 +58,15 @@ public class ArturMain {
 
         */
 
-        Iterator ourIterator = hashMap.keySet().iterator();
+        long startTime = System.currentTimeMillis();
 
-        while (ourIterator.hasNext()) {
-            System.out.println(ourIterator.next());
+        Iterator valueIterator = hashMap.values().iterator();
+        Iterator keyIterator = hashMap.keySet().iterator();
+
+        while (valueIterator.hasNext() && keyIterator.hasNext()) {
+            System.out.println((keyIterator.next()) + ", value: " + (valueIterator.next()));
         }
+
 
         long endTime = System.currentTimeMillis();
 

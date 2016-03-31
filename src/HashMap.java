@@ -19,9 +19,6 @@ public class HashMap
     //internal array to hold Nodes
     private Node[] nodes;
 
-    //Internal iterator used to loop through
-    private HashMapIterator<AtomicInteger> iterator;
-
     public HashMap(int initialSize) throws Exception
     {
         if(initialSize <= 0)
@@ -29,7 +26,6 @@ public class HashMap
             throw new Exception("Initial size must be greater than 0");
         }
         this.nodes = new Node[initialSize];
-        this.iterator = new HashMapIterator<>();
     }
 
     /**
@@ -133,20 +129,8 @@ public class HashMap
     }
 
     /**
-     * Returns a iterator to the internal node array.
-     * @return
-     */
-    public Iterator<AtomicInteger> iterator() {
-        return iterator;
-    }
-
-    public ArrayList<AtomicInteger> values() {
-        return null;
-    }
-
-    /**
      * keySet() returns a HashSet of all the keys in the HashMap.
-     * The HashSet can be used to get get a iterator to work with the keys in whatever way is needed.
+     * The HashSet can be used to get get an iterator to work with the keys in whatever way is needed.
      * @return a HashSet of all the keys.
      * */
     public HashSet<String> keySet() {
@@ -173,6 +157,34 @@ public class HashMap
     }
 
     /**
+     * values() returns a linked list of all the values in the HashMap.
+     * The linked list can be used to get an iterator to work with the values in whatever way is needed.
+     * @return a linked list of all the values.
+     */
+    public LinkedList<AtomicInteger> values() {
+
+        LinkedList<AtomicInteger> linkedList = new LinkedList<>();
+
+        int numLeft = nodes.length;
+
+        for (int i = 0; i < numLeft; numLeft--, i++) {
+            if (nodes[i] != null) {
+                linkedList.add(nodes[i].getInteger());
+                numLeft--;
+
+                Node nextNode = nodes[i].getNext();
+                while (nextNode != null) {
+                    linkedList.add(nextNode.getInteger());
+                    nextNode = nextNode.getNext();
+                    numLeft--;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Get the hashcode of a string
      * @param s The string
      * @return The hashcode
@@ -187,46 +199,6 @@ public class HashMap
         }
 
         return hash;
-    }
-
-    /**
-     * WARNING - keySet() and values() need to be implemented before making this work properly.
-     * Iterators in a HashMap go through a "SET" of keys or/and values. They do not go through the internal array.
-     * I made it go through the internal array for now.
-     * */
-    private class HashMapIterator<T> implements Iterator<T> {
-
-        // index of next element to return
-        int cursor;
-
-        // index of last element returned; -1 if no such
-        int lastReturned;
-
-        HashMapIterator() {
-            cursor = 0;
-            lastReturned = -1;
-        }
-
-        @Override
-        public boolean hasNext() {
-            if (nodes[cursor] == null) {
-                return false;
-            } else {
-                return true;
-            }
-        }
-
-        @Override
-        public T next() {
-            if (nodes[cursor] == null) {
-                cursor++;
-                return null;
-            } else {
-                T value = (T) nodes[cursor].getInteger();
-                cursor++;
-                return value;
-            }
-        }
     }
 
     private class Node
