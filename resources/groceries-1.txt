@@ -1,0 +1,27 @@
+napkins	large	light	soft	nonbreakable
+eggs	medium	medium	soft	breakable
+breadLoaf	medium	light	soft	nonbreakable
+beans	small	heavy	rigid	nonbreakable
+beans	small	heavy	rigid	nonbreakable
+beans	small	heavy	rigid	nonbreakable
+lightBulbs	medium	light	rigid	breakable
+bacon	medium	medium	flexible	nonbreakable
+petFood	large	heavy	flexible	breakable
+tissues	medium	light	rigid	nonbreakable
+slicedCheese	small	light	rigid	nonbreakable
+tissues	medium	light	rigid	nonbreakable
+hotdogs	small	light	flexible	nonbreakable
+hotdogBuns	medium	soft	nonbreakable
+hotdogBuns	medium	soft	nonbreakable
+pickleRelish	small	medium	rigit	nonbreakable
+tortillaChips	large	light	soft	breakable
+salsa	medium	medium	rigid	nonbreakable
+potatoChips	large	light	soft	breakable
+ketchup	medium	medium	rigid	nonbreakable
+mustard medium	medium	rigid	nonbreakable
+soda	large	heavy	rigid	nonbreakable
+soda	large	heavy	rigid	nonbreakable
+juice	large	heavy	rigid	nonbreakable
+sponges	small	light	soft	nonbreakable
+hotdogBuns	medium	soft	nonbreakable
+beer	large	heavy	rigid	nonbreakable
