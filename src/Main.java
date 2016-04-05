@@ -74,6 +74,8 @@ public class Main {
 
         printHashTable(table);
 
+        System.out.println("Size of table (All items including those in the same array index): " + table.size());
+
     }
 
     /**
