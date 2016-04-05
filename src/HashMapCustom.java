@@ -27,7 +27,8 @@ public class HashMapCustom
         }
 
         //make initialSize prime
-        initialSize = MathUtils.getNextPrime(initialSize);
+        if(!MathUtils.isPrime(initialSize))
+            initialSize = MathUtils.getNextPrime(initialSize);
 
         this.nodes = new Node[initialSize];
     }
