@@ -72,6 +72,9 @@ public class HashMapCustom
             //Move array to a temp variable
             Node[] temp = this.nodes;
 
+            //Setting the usedArraySpace to 0 because it needs to recalculated since the indexes are going to be different.
+            usedArraySpace = 0;
+
             //Get the new size, the next prime greater than the current length * 2
             int newSize = MathUtils.getNextPrime(this.nodes.length * 2);
             this.nodes = new Node[newSize];
