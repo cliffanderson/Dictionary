@@ -158,7 +158,7 @@ public class HashMapCustom
      * @return a HashSet of all the keys.
      * */
     public HashSet<String> keySet() {
-        HashSet<String> arrayList = new HashSet<>();
+        HashSet<String> arrayList = new HashSet<String>();
 
         //go through every node in this.nodes and then go through the chain
         for(int i = 0; i < this.nodes.length; i++)
@@ -181,7 +181,7 @@ public class HashMapCustom
      */
     public LinkedList<AtomicInteger> values() {
 
-        LinkedList<AtomicInteger> linkedList = new LinkedList<>();
+        LinkedList<AtomicInteger> linkedList = new LinkedList<AtomicInteger>();
 
         int numLeft = nodes.length;
 
