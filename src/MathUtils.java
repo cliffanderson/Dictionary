@@ -7,10 +7,17 @@
  */
 public class MathUtils
 {
-    public int getNextPrime(int num)
+    //Get the next prime that is equal to or greater than num
+    public static int getNextPrime(int num)
     {
-        return 0;
+        while(!isPrime(num))
+        {
+            num++;
+        }
+
+        return num;
     }
+
     /**
      * Check if a number is prime or not
      * @param num

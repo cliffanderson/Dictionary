@@ -1,4 +1,3 @@
-import javax.xml.crypto.NodeSetData;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -26,11 +25,16 @@ public class HashMapCustom
         {
             throw new Exception("Initial size must be greater than 0");
         }
+
+        //make initialSize prime
+        initialSize = MathUtils.getNextPrime(initialSize);
+
         this.nodes = new Node[initialSize];
+        this.iterator = new HashMapIterator<>();
     }
 
     /**
-     * Add a new entry to the HashMapCustom. If the entry already exists, replace the value
+     * Add a new entry to the HashTable. If the entry already exists, replace the value
      * @param s the String
      * @param i the value
      */
@@ -49,7 +53,8 @@ public class HashMapCustom
             this.usedArraySpace++;
             this.currentSize++;
         }
-        else{
+        else
+        {
              while (node.getNext() != null){
                  node = node.getNext();
              }
@@ -65,7 +70,26 @@ public class HashMapCustom
         if(usedArraySpace >= (int) (this.nodes.length * 0.75))
         {
             //Must resize array
+            //Move array to a temp variable
+            Node[] temp = this.nodes;
 
+            //Get the new size, the next prime greater than the current length * 2
+            int newSize = MathUtils.getNextPrime(this.nodes.length * 2);
+            this.nodes = new Node[newSize];
+
+            //Fill new array with old elements
+            for(int c = 0; c < temp.length; c++)
+            {
+                Node n = temp[c];
+                while(n != null)
+                {
+                    //Add every node in chain
+                    this.put(n.getString(), n.getInteger());
+                    n = n.getNext();
+                }
+            }
+
+            //Done
         }
     }
 
@@ -135,22 +159,16 @@ public class HashMapCustom
      * @return a HashSet of all the keys.
      * */
     public HashSet<String> keySet() {
-
         HashSet<String> arrayList = new HashSet<>();
 
-        int numLeft = nodes.length;
+        //go through every node in this.nodes and then go through the chain
+        for(int i = 0; i < this.nodes.length; i++)
+        {
+            Node n = this.nodes[i];
 
-        for (int i = 0; i < numLeft; numLeft--, i++) {
-            if (nodes[i] != null) {
-                arrayList.add(nodes[i].getString());
-                numLeft--;
-
-                Node nextNode = nodes[i].getNext();
-                while (nextNode != null) {
-                    arrayList.add(nextNode.getString());
-                    nextNode = nextNode.getNext();
-                    numLeft--;
-                }
+            while (n != null) {
+                arrayList.add(n.getString());
+                n = n.getNext();
             }
         }
 
