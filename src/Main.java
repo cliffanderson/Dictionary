@@ -22,7 +22,7 @@ public class Main {
      */
     public static void main(String[] args) throws Exception{
         //First make the table
-        HashTable table = new HashTable(50);
+        HashMapCustom table = new HashMapCustom(50);
 
         File file = selectFile(new File("resources"));
 
@@ -69,7 +69,7 @@ public class Main {
      * prints out each entry as long as its value does not equal 1
      * @param table The HashTable
      */
-    public static void printHashTable(HashTable table) {
+    public static void printHashTable(HashMapCustom table) {
         Iterator ourIterator = table.keySet().iterator();
 
         while (ourIterator.hasNext()) {
