@@ -21,10 +21,21 @@ public class Main {
      * @throws Exception
      */
     public static void main(String[] args) throws Exception{
-        //First make the table
-        HashMapCustom table = new HashMapCustom(50);
+        Scanner input = new Scanner(System.in);
 
-        File file = selectFile(new File("resources"));
+        //First make the table
+        int size = getInitialSize(input);
+        HashMapCustom table = new HashMapCustom(size);
+
+
+        File file = selectFile(new File("resources"), input);
+
+        //can now close the scanner
+        input.close();
+
+        //track runtime after selecting file
+        trackRunningTime();
+
 
         BufferedReader reader = new BufferedReader(new FileReader(file));
         //All data
@@ -36,11 +47,12 @@ public class Main {
         {
             data += line + " ";
         }
+        reader.close();
 
         //to all lowercase
         data = data.toLowerCase();
 
-        //remove all characters that are not a-z
+        //remove all characters that are not a-z or spaces
         data = data.replaceAll("[^a-z\\s]", "");
 
         //split by spaces
@@ -78,12 +90,34 @@ public class Main {
         }
     }
 
+    public static int getInitialSize(Scanner input)
+    {
+        System.out.println("Please enter the initial size of the hashtable.");
+        System.out.println("If it is not prime it will be increased to the next prime: ");
+
+        int initialSize = -1;
+
+        while(initialSize < 0)
+        {
+            initialSize = Integer.parseInt(input.nextLine());
+        }
+
+        //if not prime increase
+        int primeInitialSize = MathUtils.getNextPrime(initialSize);
+        if(primeInitialSize != initialSize)
+        {
+            System.out.println("Initial size was increased to " + primeInitialSize + " to make it prime");
+        }
+
+        return primeInitialSize;
+    }
+
     /**
      * Method for choosing a file from a directory
      * @param dir The directory
      * @return The chosen file
      */
-    public static File selectFile(File dir)
+    public static File selectFile(File dir, Scanner input)
     {
         //First null check
         if(dir == null) return null;
@@ -106,16 +140,31 @@ public class Main {
 
         //Read in choice
         int choice = -1;
-        Scanner input = new Scanner(System.in);
+
         while(choice < 0 || choice >= files.size())
         {
             System.out.println("Please input your choice between 0 and " + (files.size() - 1));
-            choice = input.nextInt();
+            choice = Integer.parseInt(input.nextLine());
         }
 
-        input.close();
-
-        System.out.println("return");
         return files.get(choice);
+    }
+
+    /**
+     * Find out how long the program took to run
+     */
+    static void trackRunningTime()
+    {
+        final long start = System.currentTimeMillis();
+
+        Runtime.getRuntime().addShutdownHook(new Thread()
+        {
+            @Override
+            public void run()
+            {
+                System.out.println("\n\nTotal run time: " + (System.currentTimeMillis() - start) + " ms");
+            }
+
+        });
     }
 }

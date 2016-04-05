@@ -10,12 +10,13 @@ public class MathUtils
     //Get the next prime that is equal to or greater than num
     public static int getNextPrime(int num)
     {
-        while(!isPrime(num))
+        int result = num;
+        while(!isPrime(result))
         {
-            num++;
+            result++;
         }
 
-        return num;
+        return result;
     }
 
     /**
@@ -26,7 +27,7 @@ public class MathUtils
     public static boolean isPrime(int num)
     {
         //Check through all numbers less than half of num
-        for(int i = 2; i < num/2; i++)
+        for(int i = 2; i <= num/2; i++)
         {
             if(num % i  == 0)
             {
