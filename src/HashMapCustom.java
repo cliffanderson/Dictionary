@@ -30,7 +30,6 @@ public class HashMapCustom
         initialSize = MathUtils.getNextPrime(initialSize);
 
         this.nodes = new Node[initialSize];
-        this.iterator = new HashMapIterator<>();
     }
 
     /**
