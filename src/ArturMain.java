@@ -8,13 +8,13 @@ public class ArturMain {
 
     public static void main(String[] args) throws Exception {
 
-        HashMapCustom hashMap = new HashMapCustom(10002);
+        HashMapCustom hashMap = new HashMapCustom(50);
 
         hashMap.put("deed", new AtomicInteger(2));
         hashMap.put("Artur", new AtomicInteger(3));
 
         //Place data into hashMap.
-        for (int i = 0; i < 10000; i++) {
+        for (int i = 0; i < 100; i++) {
             hashMap.put("key: " + i, new AtomicInteger((i * 100) % 7));
         }
 
@@ -36,17 +36,16 @@ public class ArturMain {
         }
         */
 
+        while (keyIterator.hasNext()) {
+            System.out.println(keyIterator.next());
+        }
+
+        while (valueIterator.hasNext()) {
+            System.out.println(valueIterator.next());
+        }
+
         //End log time.
         long endTime = System.currentTimeMillis();
-
-        //Testing clear
-        hashMap.clear();
-
-        System.out.println("Is Artur key in hashMap now: " + hashMap.containsKey("Artur"));
-
-        System.out.println(keyIterator.next());
-        //So the iterator doesn't update if the hashMap is cleared.
-        //Why does this happen?
 
         System.out.println("Time taken in milliseconds: " + (endTime - startTime));
     }

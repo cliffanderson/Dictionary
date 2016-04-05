@@ -161,20 +161,19 @@ public class HashMapCustom
      * @return a HashSet of all the keys.
      * */
     public HashSet<String> keySet() {
-        HashSet<String> arrayList = new HashSet<String>();
+        HashSet<String> hashSet = new HashSet<String>();
 
         //go through every node in this.nodes and then go through the chain
-        for(int i = 0; i < this.nodes.length; i++)
-        {
+        for(int i = 0; i < this.nodes.length; i++) {
             Node n = this.nodes[i];
 
             while (n != null) {
-                arrayList.add(n.getString());
+                hashSet.add(n.getString());
                 n = n.getNext();
             }
         }
 
-        return arrayList;
+        return hashSet;
     }
 
     /**
@@ -183,32 +182,54 @@ public class HashMapCustom
      * @return a linked list of all the values.
      */
     public LinkedList<AtomicInteger> values() {
-
         LinkedList<AtomicInteger> linkedList = new LinkedList<AtomicInteger>();
 
-        int numLeft = nodes.length;
+        for (int i = 0; i < nodes.length; i++) {
+            Node n = nodes[i];
 
-        for (int i = 0; i < numLeft; numLeft--, i++) {
-            if (nodes[i] != null) {
-                linkedList.add(nodes[i].getInteger());
-                numLeft--;
-
-                Node nextNode = nodes[i].getNext();
-                while (nextNode != null) {
-                    linkedList.add(nextNode.getInteger());
-                    nextNode = nextNode.getNext();
-                    numLeft--;
-                }
+            while (n != null) {
+                linkedList.add(n.getInteger());
+                n = n.getNext();
             }
         }
 
         return linkedList;
     }
 
+    /**
+     * Clears the HashMap.
+     */
     public void clear() {
         nodes = new Node[10];
         currentSize = 0;
         usedArraySpace = 0;
+    }
+
+    /**
+     * Prints out the size of each bucket in the internal array of the HashMap.
+     * Each bucket is a linked chain of nodes.
+     */
+    public void printTableAnalysis() {
+
+        int[] sizeOfBuckets = new int[nodes.length];
+
+        //Getting size of each bucket.
+        for (int i = 0; i < nodes.length; i++) {
+            Node n = nodes[i];
+            int size = 0;
+
+            while (n != null) {
+                size++;
+                n = n.getNext();
+            }
+
+            sizeOfBuckets[i] = size;
+        }
+
+        //Printing the sizes of each bucket, including the buckets that are empty.
+        for (int i = 0; i < sizeOfBuckets.length; i++) {
+            System.out.println("Bucket " + i + ": " + sizeOfBuckets[i]);
+        }
     }
 
     /**

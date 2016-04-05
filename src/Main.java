@@ -48,6 +48,8 @@ public class Main {
         System.out.println(String.valueOf(words.length) + " words");
 
         //for each words add it to hashmap or increment count if it exists
+        //The incremented count is then added as the new value for the key.
+        //This way, for the dictionary, we can know how many times a "key" aka a word appears.
         for(String word : words)
         {
             if(table.containsKey(word))
@@ -62,8 +64,9 @@ public class Main {
 
         printHashTable(table);
 
-        System.out.println("Size of table (All items including those in the same array index): " + table.size());
+        table.printTableAnalysis();
 
+        System.out.println("Size of table (All items including those in the same array index): " + table.size());
     }
 
     /**
