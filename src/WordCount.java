@@ -11,7 +11,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Group members: Tom Plano, Cliff Anderson, Will Lawrence, Artur Janowiec
  * Due date: 4/6/16
  */
-public class Main {
+public class WordCount {
 
     /**
      * the main method

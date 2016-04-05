@@ -201,7 +201,7 @@ public class HashMapCustom
      * Clears the HashMap.
      */
     public void clear() {
-        nodes = new Node[10];
+        nodes = new Node[nodes.length];
         currentSize = 0;
         usedArraySpace = 0;
     }
