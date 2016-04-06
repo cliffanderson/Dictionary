@@ -1,0 +1,274 @@
+
+
+
+Pre Resize
+==============================
+Number of buckets: 2
+Table size: 3
+Load factor: 1.5
+Buckets in use: 2
+Percentage of buckets in use: 100.0
+Bucket min size: 1
+Bucket max size: 2
+Bucket average size: 150
+Bucket mode size: 1
+==============================
+
+Post Resize
+==============================
+Number of buckets: 5
+Table size: 6
+Load factor: 1.2
+Buckets in use: 2
+Percentage of buckets in use: 40.0
+Bucket min size: 0
+Bucket max size: 2
+Bucket average size: 60
+Bucket mode size: 0
+==============================
+
+
+
+
+Pre Resize
+==============================
+Number of buckets: 5
+Table size: 7
+Load factor: 1.4
+Buckets in use: 3
+Percentage of buckets in use: 60.0
+Bucket min size: 0
+Bucket max size: 2
+Bucket average size: 80
+Bucket mode size: 0
+==============================
+
+Post Resize
+==============================
+Number of buckets: 11
+Table size: 11
+Load factor: 1.0
+Buckets in use: 3
+Percentage of buckets in use: 27.27272727272727
+Bucket min size: 0
+Bucket max size: 2
+Bucket average size: 36
+Bucket mode size: 0
+==============================
+
+
+
+
+Pre Resize
+==============================
+Number of buckets: 11
+Table size: 12
+Load factor: 1.0909090909090908
+Buckets in use: 4
+Percentage of buckets in use: 36.36363636363637
+Bucket min size: 0
+Bucket max size: 2
+Bucket average size: 45
+Bucket mode size: 0
+==============================
+
+Post Resize
+==============================
+Number of buckets: 23
+Table size: 17
+Load factor: 0.7391304347826086
+Buckets in use: 5
+Percentage of buckets in use: 21.73913043478261
+Bucket min size: 0
+Bucket max size: 1
+Bucket average size: 21
+Bucket mode size: 0
+==============================
+
+
+
+
+Pre Resize
+==============================
+Number of buckets: 23
+Table size: 24
+Load factor: 1.0434782608695652
+Buckets in use: 8
+Percentage of buckets in use: 34.78260869565217
+Bucket min size: 0
+Bucket max size: 3
+Bucket average size: 52
+Bucket mode size: 0
+==============================
+
+Post Resize
+==============================
+Number of buckets: 47
+Table size: 36
+Load factor: 0.7659574468085106
+Buckets in use: 10
+Percentage of buckets in use: 21.27659574468085
+Bucket min size: 0
+Bucket max size: 2
+Bucket average size: 25
+Bucket mode size: 0
+==============================
+
+
+
+
+Pre Resize
+==============================
+Number of buckets: 47
+Table size: 48
+Load factor: 1.0212765957446808
+Buckets in use: 15
+Percentage of buckets in use: 31.914893617021278
+Bucket min size: 0
+Bucket max size: 3
+Bucket average size: 51
+Bucket mode size: 0
+==============================
+
+Post Resize
+==============================
+Number of buckets: 97
+Table size: 72
+Load factor: 0.7422680412371134
+Buckets in use: 22
+Percentage of buckets in use: 22.68041237113402
+Bucket min size: 0
+Bucket max size: 2
+Bucket average size: 24
+Bucket mode size: 0
+==============================
+
+
+
+
+Pre Resize
+==============================
+Number of buckets: 97
+Table size: 98
+Load factor: 1.0103092783505154
+Buckets in use: 41
+Percentage of buckets in use: 42.2680412371134
+Bucket min size: 0
+Bucket max size: 2
+Bucket average size: 51
+Bucket mode size: 0
+==============================
+
+Post Resize
+==============================
+Number of buckets: 197
+Table size: 148
+Load factor: 0.751269035532995
+Buckets in use: 44
+Percentage of buckets in use: 22.33502538071066
+Bucket min size: 0
+Bucket max size: 2
+Bucket average size: 25
+Bucket mode size: 0
+==============================
+
+
+
+
+Pre Resize
+==============================
+Number of buckets: 197
+Table size: 198
+Load factor: 1.0050761421319796
+Buckets in use: 79
+Percentage of buckets in use: 40.10152284263959
+Bucket min size: 0
+Bucket max size: 3
+Bucket average size: 50
+Bucket mode size: 0
+==============================
+
+Post Resize
+==============================
+Number of buckets: 397
+Table size: 298
+Load factor: 0.7506297229219143
+Buckets in use: 83
+Percentage of buckets in use: 20.906801007556673
+Bucket min size: 0
+Bucket max size: 3
+Bucket average size: 25
+Bucket mode size: 0
+==============================
+
+
+
+
+Pre Resize
+==============================
+Number of buckets: 397
+Table size: 398
+Load factor: 1.0025188916876575
+Buckets in use: 135
+Percentage of buckets in use: 34.005037783375315
+Bucket min size: 0
+Bucket max size: 6
+Bucket average size: 50
+Bucket mode size: 0
+==============================
+
+Post Resize
+==============================
+Number of buckets: 797
+Table size: 598
+Load factor: 0.7503136762860728
+Buckets in use: 135
+Percentage of buckets in use: 16.938519447929735
+Bucket min size: 0
+Bucket max size: 6
+Bucket average size: 25
+Bucket mode size: 0
+==============================
+
+
+
+
+Pre Resize
+==============================
+Number of buckets: 797
+Table size: 798
+Load factor: 1.001254705144291
+Buckets in use: 193
+Percentage of buckets in use: 24.215809284818068
+Bucket min size: 0
+Bucket max size: 6
+Bucket average size: 50
+Bucket mode size: 0
+==============================
+
+Post Resize
+==============================
+Number of buckets: 1597
+Table size: 1198
+Load factor: 0.7501565435190983
+Buckets in use: 193
+Percentage of buckets in use: 12.08515967438948
+Bucket min size: 0
+Bucket max size: 6
+Bucket average size: 25
+Bucket mode size: 0
+==============================
+
+Final Metrics:
+==============================
+Number of buckets: 1597
+Table size: 1293
+Load factor: 0.8096430807764559
+Buckets in use: 210
+Percentage of buckets in use: 13.149655604257985
+Bucket min size: 0
+Bucket max size: 7
+Bucket average size: 30
+Bucket mode size: 0
+==============================
+

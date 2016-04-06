@@ -1,3 +1,6 @@
+import java.io.File;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -19,7 +22,10 @@ public class HashMapCustom
     //internal array to hold Nodes
     private Node[] nodes;
 
-    public HashMapCustom(int initialSize) throws Exception
+    //File to log metrics to
+    private PrintWriter metricsFileOut;
+
+    public HashMapCustom(int initialSize, File metricsFile) throws Exception
     {
         if(initialSize <= 0)
         {
@@ -27,10 +33,13 @@ public class HashMapCustom
         }
 
         //make initialSize prime
-        if(!MathUtils.isPrime(initialSize))
+        if(!MathUtils.isPrime(initialSize)) {
             initialSize = MathUtils.getNextPrime(initialSize);
+        }
 
         this.nodes = new Node[initialSize];
+
+        this.metricsFileOut = new PrintWriter(new FileWriter(metricsFile));
     }
 
     /**
@@ -39,6 +48,19 @@ public class HashMapCustom
      * @param i the value
      */
     public void put(String s, AtomicInteger i)
+    {
+        privatePut(s, i, true);
+    }
+
+    /**
+     * Private put method. When resizing, put is called inside to add elements back into the table. This can lead to
+     * the chaining of multiple resizes, and messes up the metrics output. To stop that, we recursively call this private
+     * put method and do not allow resizing
+     * @param s
+     * @param i
+     * @param allowResize
+     */
+    public void privatePut(String s, AtomicInteger i, boolean allowResize)
     {
         /*
         if s exists in any node replace the value
@@ -67,9 +89,12 @@ public class HashMapCustom
 
         //Check to see if resizing is needed
         //Used array space must not exceed 75% of the array length
-        if(usedArraySpace >= (int) (this.nodes.length * 0.75))
+        if(this.getLoadFactor() > 1.0 && allowResize)
         {
             //Must resize array
+            //first record metrics to file
+            this.writeMetricsToFileWithMessage("\n\n\nPre Resize");
+
             //Move array to a temp variable
             Node[] temp = this.nodes;
 
@@ -87,12 +112,14 @@ public class HashMapCustom
                 while(n != null)
                 {
                     //Add every node in chain
-                    this.put(n.getString(), n.getInteger());
+                    this.privatePut(n.getString(), n.getInteger(), false);
                     n = n.getNext();
                 }
             }
 
             //Done
+            //log metrics again
+            this.writeMetricsToFileWithMessage("Post Resize");
         }
     }
 
@@ -155,6 +182,107 @@ public class HashMapCustom
     {
         return this.currentSize;
     }
+
+    /**
+     * Get the load factor of the hashtable
+     * @return Load factor, number of distinct entries / size of array
+     */
+    private double getLoadFactor()
+    {
+        return (double) this.size() /  (double) this.nodes.length;
+    }
+
+    /**
+     * Get the amount of buckets in use
+     * @return The number of this.nodes indicies that are not null
+     */
+    private int getBucketsInUse()
+    {
+        int amount = 0;
+        for(Node n : this.nodes)
+        {
+            if(n != null) amount++;
+        }
+
+        return amount;
+    }
+
+    /**
+     * Get info about the buckets
+     * @return An array of length 4 containing: min, max, avg, and mode of the size of buckets
+     */
+    private int[] getBucketStats()
+    {
+        int min = Integer.MAX_VALUE;
+        int max = Integer.MIN_VALUE;
+        int average = 0, total = 0;
+        int mode = 0;
+
+        for(Node bucket : this.nodes)
+        {
+            int bucketSize = 0;
+            while(bucket != null)
+            {
+                bucket = bucket.next;
+                bucketSize++;
+            }
+
+            if(bucketSize > max)
+            {
+                max = bucketSize;
+            }
+
+            if(bucketSize < min)
+            {
+                min = bucketSize;
+            }
+
+            total += bucketSize;
+        }
+
+        double decimalAverage = (double) total / (double) this.nodes.length;
+        average = (int) (decimalAverage * 100);
+
+        //to calculate mode, make an array of size max + 1, and increment where each bucket size occurs
+        //then find the max value in the array, and the index of the max value is the mode
+        int[] occuranceCount = new int[max + 1];
+        for(Node bucket : this.nodes)
+        {
+            int bucketSize = 0;
+            while(bucket != null)
+            {
+                bucket = bucket.next;
+                bucketSize++;
+            }
+
+            occuranceCount[bucketSize]++;
+        }
+
+        int occuranceCountMax = -1;
+        for(int i = 0; i < occuranceCount.length; i++)
+        {
+            if(occuranceCount[i] > occuranceCountMax)
+            {
+                occuranceCountMax = occuranceCount[i];
+                mode = i;
+            }
+        }
+
+        return new int[]{min, max, average, mode};
+
+    }
+
+    /**
+     * Write the hashtable metrics to the metrics file with a message written before
+     * @param msg The message to go before
+     */
+    public void writeMetricsToFileWithMessage(String msg)
+    {
+        this.metricsFileOut.println(msg);
+        this.metricsFileOut.println(this.getMetrics());
+        this.metricsFileOut.flush();
+    }
+
 
     /**
      * keySet() returns a HashSet of all the keys in the HashMapCustom.
@@ -231,6 +359,28 @@ public class HashMapCustom
         for (int i = 0; i < sizeOfBuckets.length; i++) {
             System.out.println("Bucket " + i + ": " + sizeOfBuckets[i]);
         }
+    }
+
+    /**
+     * Get the metrics of the hashtable
+     * @return the number of entries, load factor, info about number of buckets in use, \
+     * min,max,avg,mode of size of buckets (All formatted as a string)
+     */
+    public String getMetrics()
+    {
+        int[] bucketMetrics = this.getBucketStats(); //min max avg mode
+
+        return "==============================" + "\n" +
+                "Number of buckets: " + this.nodes.length + "\n" +
+                "Table size: " + this.size() + "\n" +
+                "Load factor: " + this.getLoadFactor() + "\n" +
+                "Buckets in use: " + this.getBucketsInUse() + "\n" +
+                "Percentage of buckets in use: " + (((double)this.getBucketsInUse() / (double)this.nodes.length)) * 100 + "\n" +
+                "Bucket min size: " + bucketMetrics[0] + "\n" +
+                "Bucket max size: " + bucketMetrics[1] + "\n" +
+                "Bucket average size: " + bucketMetrics[2] + "\n" +
+                "Bucket mode size: " + bucketMetrics[3] + '\n' +
+                "==============================" + "\n";
     }
 
     /**

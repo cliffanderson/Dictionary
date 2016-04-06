@@ -1,6 +1,5 @@
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
+import java.io.*;
+import java.nio.file.Files;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -20,34 +19,73 @@ public class WordCount {
      * @param args Command line arguments
      * @throws Exception
      */
-    public static void main(String[] args) throws Exception{
+    public static void main(String[] args) throws Exception {
         Scanner input = new Scanner(System.in);
 
         //First make the table
-        int size = getInitialSize(input);
-        HashMapCustom table = new HashMapCustom(size);
-
-
-        File file = selectFile(new File("resources"), input);
-
-        //can now close the scanner
+        int initialSize = getInitialSize(input);
         input.close();
 
-        //track runtime after selecting file
-        trackRunningTime();
+        File textFileDir = new File("resources");
 
+        //For every file, make a hashtable, log metrics, and log output
+        for (File testFile : textFileDir.listFiles()) {
+            //The file name without ending
+            String fileName = testFile.getName().replace(".txt", "");
 
-        BufferedReader reader = new BufferedReader(new FileReader(file));
-        //All data
-        String data = "";
-        //The current line we are reading
-        String line = "";
+            //Make metrics and output files
+            File metricsFile = new File("hash_table_metrics" + File.separator + fileName + ".metrics");
+            File outputFile = new File("hash_table_output" + File.separator + fileName + ".output");
 
-        while((line = reader.readLine())!=null)
-        {
-            data += line + " ";
+            //Clear files if they already exist
+            if(metricsFile.exists()) metricsFile.delete();
+            if(outputFile.exists()) outputFile.delete();
+
+            //Create hash table with initial size and metrics file
+            HashMapCustom table = new HashMapCustom(initialSize, metricsFile);
+
+            //Read in the test file and add all words (free of punctuation) to the table
+            System.out.println("Reading in file: " + fileName);
+            fillTableWithFileContents(testFile, table);
+
+            //Print metrics one last time
+            table.writeMetricsToFileWithMessage("Final Metrics:");
+
+            generateAndPrintOutput(table, outputFile);
         }
-        reader.close();
+    }
+
+    /**
+     * Generate useful output given a hashtable
+     * @param table The Hashtable
+     */
+    private static void generateAndPrintOutput(HashMapCustom table, File outputFile) throws Exception
+    {
+        //print the words and their frequency to an output file
+        PrintWriter out = new PrintWriter(new FileWriter(outputFile));
+
+        for(String s : table.keySet())
+        {
+            out.println(s + " " + table.get(s).get());
+        }
+
+        out.flush();
+        out.close();
+    }
+
+    /**
+     * Helper method to take file contents and add it to the table, incrementing if the word is already in the table
+     * @param file The file to fill the table with
+     * @param table The HashTable to fill
+     * @throws Exception Problem with IO
+     */
+    private static void fillTableWithFileContents(File file, HashMapCustom table) throws Exception
+    {
+        //Read in file in bytes
+        byte[] bytes = Files.readAllBytes(file.toPath());
+
+        //Convert bytes to string and replace new lines with spaces
+        String data = new String(bytes).replace("\n", " ");
 
         //to all lowercase
         data = data.toLowerCase();
@@ -57,13 +95,14 @@ public class WordCount {
 
         //split by spaces
         String[] words = data.split("\\s");
-        System.out.println(String.valueOf(words.length) + " words");
 
         //for each words add it to hashmap or increment count if it exists
         //The incremented count is then added as the new value for the key.
         //This way, for the dictionary, we can know how many times a "key" aka a word appears.
         for(String word : words)
         {
+            if(word.isEmpty()) continue;
+
             if(table.containsKey(word))
             {
                 table.get(word).incrementAndGet();
@@ -73,12 +112,6 @@ public class WordCount {
                 table.put(word, new AtomicInteger(1));
             }
         }
-
-        printHashTable(table);
-
-        table.printTableAnalysis();
-
-        System.out.println("Size of table (All items including those in the same array index): " + table.size());
     }
 
     /**
