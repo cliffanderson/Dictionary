@@ -11,13 +11,10 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Group members: Tom Plano, Cliff Anderson, Will Lawrence, Artur Janowiec
  * Due date: 4/6/16
  */
-public class HashMapCustom
+public class HashTable
 {
-    //amount of items in the HashMapCustom. Keep in mind that a single array spot can hold many items.
+    //amount of items in the HashTable. Keep in mind that a single array spot can hold many items.
     private int currentSize = 0;
-
-    //Used array space
-    private int usedArraySpace = 0;
 
     //internal array to hold Nodes
     private Node[] nodes;
@@ -25,7 +22,7 @@ public class HashMapCustom
     //File to log metrics to
     private PrintWriter metricsFileOut;
 
-    public HashMapCustom(int initialSize, File metricsFile) throws Exception
+    public HashTable(int initialSize, File metricsFile) throws Exception
     {
         if(initialSize <= 0)
         {
@@ -72,7 +69,6 @@ public class HashMapCustom
         if (node == null){
             //Make a new node
             this.nodes[index]=new Node(s,i);
-            this.usedArraySpace++;
             this.currentSize++;
         }
         else
@@ -97,9 +93,6 @@ public class HashMapCustom
 
             //Move array to a temp variable
             Node[] temp = this.nodes;
-
-            //Setting the usedArraySpace to 0 because it needs to recalculated since the indexes are going to be different.
-            usedArraySpace = 0;
 
             //Get the new size, the next prime greater than the current length * 2
             int newSize = MathUtils.getNextPrime(this.nodes.length * 2);
@@ -258,12 +251,12 @@ public class HashMapCustom
             occuranceCount[bucketSize]++;
         }
 
-        int occuranceCountMax = -1;
+        int occurrenceCountMax = -1;
         for(int i = 0; i < occuranceCount.length; i++)
         {
-            if(occuranceCount[i] > occuranceCountMax)
+            if(occuranceCount[i] > occurrenceCountMax)
             {
-                occuranceCountMax = occuranceCount[i];
+                occurrenceCountMax = occuranceCount[i];
                 mode = i;
             }
         }
@@ -285,7 +278,7 @@ public class HashMapCustom
 
 
     /**
-     * keySet() returns a HashSet of all the keys in the HashMapCustom.
+     * keySet() returns a HashSet of all the keys in the HashTable.
      * The HashSet can be used to get get an iterator to work with the keys in whatever way is needed.
      * @return a HashSet of all the keys.
      * */
@@ -293,8 +286,7 @@ public class HashMapCustom
         HashSet<String> hashSet = new HashSet<String>();
 
         //go through every node in this.nodes and then go through the chain
-        for(int i = 0; i < this.nodes.length; i++) {
-            Node n = this.nodes[i];
+        for(Node n : this.nodes) {
 
             while (n != null) {
                 hashSet.add(n.getString());
@@ -306,15 +298,14 @@ public class HashMapCustom
     }
 
     /**
-     * values() returns a linked list of all the values in the HashMapCustom.
+     * values() returns a linked list of all the values in the HashTable.
      * The linked list can be used to get an iterator to work with the values in whatever way is needed.
      * @return a linked list of all the values.
      */
     public LinkedList<AtomicInteger> values() {
         LinkedList<AtomicInteger> linkedList = new LinkedList<AtomicInteger>();
 
-        for (int i = 0; i < nodes.length; i++) {
-            Node n = nodes[i];
+        for (Node n : this.nodes) {
 
             while (n != null) {
                 linkedList.add(n.getInteger());
@@ -331,34 +322,6 @@ public class HashMapCustom
     public void clear() {
         nodes = new Node[nodes.length];
         currentSize = 0;
-        usedArraySpace = 0;
-    }
-
-    /**
-     * Prints out the size of each bucket in the internal array of the HashMap.
-     * Each bucket is a linked chain of nodes.
-     */
-    public void printTableAnalysis() {
-
-        int[] sizeOfBuckets = new int[nodes.length];
-
-        //Getting size of each bucket.
-        for (int i = 0; i < nodes.length; i++) {
-            Node n = nodes[i];
-            int size = 0;
-
-            while (n != null) {
-                size++;
-                n = n.getNext();
-            }
-
-            sizeOfBuckets[i] = size;
-        }
-
-        //Printing the sizes of each bucket, including the buckets that are empty.
-        for (int i = 0; i < sizeOfBuckets.length; i++) {
-            System.out.println("Bucket " + i + ": " + sizeOfBuckets[i]);
-        }
     }
 
     /**

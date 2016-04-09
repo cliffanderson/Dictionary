@@ -37,12 +37,12 @@ public class WordCount {
             File metricsFile = new File("hash_table_metrics" + File.separator + fileName + ".metrics");
             File outputFile = new File("hash_table_output" + File.separator + fileName + ".output");
 
-            //Clear files if they already exist
+            //Delete files if they already exist
             if(metricsFile.exists()) metricsFile.delete();
             if(outputFile.exists()) outputFile.delete();
 
             //Create hash table with initial size and metrics file
-            HashMapCustom table = new HashMapCustom(initialSize, metricsFile);
+            HashTable table = new HashTable(initialSize, metricsFile);
 
             //Read in the test file and add all words (free of punctuation) to the table
             System.out.println("Reading in file: " + fileName);
@@ -59,7 +59,7 @@ public class WordCount {
      * Generate useful output given a hashtable
      * @param table The Hashtable
      */
-    private static void generateAndPrintOutput(HashMapCustom table, File outputFile) throws Exception
+    private static void generateAndPrintOutput(HashTable table, File outputFile) throws Exception
     {
         //print the words and their frequency to an output file
         PrintWriter out = new PrintWriter(new FileWriter(outputFile));
@@ -79,7 +79,7 @@ public class WordCount {
      * @param table The HashTable to fill
      * @throws Exception Problem with IO
      */
-    private static void fillTableWithFileContents(File file, HashMapCustom table) throws Exception
+    private static void fillTableWithFileContents(File file, HashTable table) throws Exception
     {
         //Read in file in bytes
         byte[] bytes = Files.readAllBytes(file.toPath());
@@ -114,20 +114,6 @@ public class WordCount {
         }
     }
 
-    /**
-     * iterates through a hashmap passed to it
-     * prints out each entry as long as its value does not equal 1
-     * @param table The HashTable
-     */
-    public static void printHashTable(HashMapCustom table) {
-        Iterator ourIterator = table.keySet().iterator();
-
-        while (ourIterator.hasNext()) {
-            String key = (String) ourIterator.next();
-            System.out.println(key + " " + table.get(key));
-        }
-    }
-
     public static int getInitialSize(Scanner input)
     {
         System.out.println("Please enter the initial size of the hashtable.");
@@ -148,61 +134,5 @@ public class WordCount {
         }
 
         return primeInitialSize;
-    }
-
-    /**
-     * Method for choosing a file from a directory
-     * @param dir The directory
-     * @return The chosen file
-     */
-    public static File selectFile(File dir, Scanner input)
-    {
-        //First null check
-        if(dir == null) return null;
-
-        //Create list of files in dir (but not dirs)
-        List<File> files = new ArrayList<File>();
-
-        for(File f : dir.listFiles())
-        {
-            if(f.isFile()) files.add(f);
-        }
-
-        //Now print out info
-        System.out.println("==============================");
-        for(int i = 0; i < files.size(); i++)
-        {
-            System.out.println(String.valueOf(i) + ". " + files.get(i).getName());
-        }
-        System.out.println("==============================");
-
-        //Read in choice
-        int choice = -1;
-
-        while(choice < 0 || choice >= files.size())
-        {
-            System.out.println("Please input your choice between 0 and " + (files.size() - 1));
-            choice = Integer.parseInt(input.nextLine());
-        }
-
-        return files.get(choice);
-    }
-
-    /**
-     * Find out how long the program took to run
-     */
-    static void trackRunningTime()
-    {
-        final long start = System.currentTimeMillis();
-
-        Runtime.getRuntime().addShutdownHook(new Thread()
-        {
-            @Override
-            public void run()
-            {
-                System.out.println("\n\nTotal run time: " + (System.currentTimeMillis() - start) + " ms");
-            }
-
-        });
     }
 }

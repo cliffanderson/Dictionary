@@ -8,7 +8,7 @@ public class ArturMain {
 
     public static void main(String[] args) throws Exception {
 
-        HashMapCustom hashMap = new HashMapCustom(50, null);
+        HashTable hashMap = new HashTable(50, null);
 
         hashMap.put("deed", new AtomicInteger(2));
         hashMap.put("Artur", new AtomicInteger(3));
