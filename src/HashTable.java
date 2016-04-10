@@ -17,7 +17,7 @@ public class HashTable
     private int currentSize = 0;
 
     //internal array to hold Nodes
-    private Node[] nodes;
+    private TeamLinkedList[] buckets;
 
     //File to log metrics to
     private PrintWriter metricsFileOut;
@@ -34,7 +34,7 @@ public class HashTable
             initialSize = MathUtils.getNextPrime(initialSize);
         }
 
-        this.nodes = new Node[initialSize];
+        this.buckets = new TeamLinkedList[initialSize];
 
         this.metricsFileOut = new PrintWriter(new FileWriter(metricsFile));
     }
@@ -63,50 +63,53 @@ public class HashTable
         if s exists in any node replace the value
         else add new string/ int pair
          */
-        int index = this.getStringHashCode(s)%this.nodes.length;
-        Node node = this.nodes[index];
+        int index = this.getStringHashCode(s) % this.buckets.length;
+        TeamLinkedList list = this.buckets[index];
 
-        if (node == null){
-            //Make a new node
-            this.nodes[index]=new Node(s,i);
+        if (list == null){
+            //Make a new list
+            this.buckets[index] = new TeamLinkedList();
+            this.buckets[index].add(s, i);
             this.currentSize++;
         }
         else
         {
-             while (node.getNext() != null){
-                 node = node.getNext();
-             }
-
-            //when next=null
-            Node newNode =new Node(s,i);
-            node.setNext(newNode);
+            //add to an existing list
+            this.buckets[index].add(s, i);
             this.currentSize++;
         }
 
         //Check to see if resizing is needed
         //Used array space must not exceed 75% of the array length
-        if(this.getLoadFactor() > 1.0 && allowResize)
+        if(allowResize && this.getLoadFactor() > 1.0)
         {
             //Must resize array
             //first record metrics to file
             this.writeMetricsToFileWithMessage("\n\n\nPre Resize");
 
             //Move array to a temp variable
-            Node[] temp = this.nodes;
+            TeamLinkedList[] temp = this.buckets;
 
             //Get the new size, the next prime greater than the current length * 2
-            int newSize = MathUtils.getNextPrime(this.nodes.length * 2);
-            this.nodes = new Node[newSize];
+            int newSize = MathUtils.getNextPrime(this.buckets.length * 2);
+            this.buckets = new TeamLinkedList[newSize];
 
             //Fill new array with old elements
-            for(int c = 0; c < temp.length; c++)
+
+            //For every current bucket, get everything and add it to the new bucket
+            for(TeamLinkedList bucket : temp)
             {
-                Node n = temp[c];
-                while(n != null)
+                //Buckets may be empty
+                if(bucket == null) continue;
+
+                //loop through every bucket
+                for(int c = 0; c < bucket.getSize(); c++)
                 {
-                    //Add every node in chain
-                    this.privatePut(n.getString(), n.getInteger(), false);
-                    n = n.getNext();
+                    String string = bucket.getString(c);
+                    AtomicInteger integer = bucket.getInteger(c);
+
+                    //false because we are currently resizing
+                    this.privatePut(string, integer, false);
                 }
             }
 
@@ -140,26 +143,23 @@ public class HashTable
      */
     public AtomicInteger get(String s) throws NoSuchElementException
     {
-        //First check and see if there is a node at index hashcode(s)
-        int index = this.getStringHashCode(s) % this.nodes.length;
-        if(this.nodes[index] == null)
+        //First check and see if there is a list at index hashcode(s)
+        int index = this.getStringHashCode(s) % this.buckets.length;
+
+        //Get the bucket
+        TeamLinkedList bucket = this.buckets[index];
+
+        if(bucket == null)
         {
             return null;
         }
 
-        //Search through this chain of nodes looking for the string s
-        Node node = this.nodes[index];
-        while(node != null)
+        //Otherwise search list for string and return atomic integer
+        for(int i = 0; i < bucket.getSize(); i++)
         {
-            if(node.getString().equals(s))
+            if(bucket.getString(i).equals(s))
             {
-                //Found it
-                return node.getInteger();
-            }
-            else
-            {
-                //Go to next node
-                node = node.getNext();
+                return bucket.getInteger(i);
             }
         }
 
@@ -182,7 +182,7 @@ public class HashTable
      */
     private double getLoadFactor()
     {
-        return (double) this.size() /  (double) this.nodes.length;
+        return (double) this.size() /  (double) this.buckets.length;
     }
 
     /**
@@ -192,9 +192,12 @@ public class HashTable
     private int getBucketsInUse()
     {
         int amount = 0;
-        for(Node n : this.nodes)
+        for(TeamLinkedList list : this.buckets)
         {
-            if(n != null) amount++;
+            if(list != null && list.getSize() != 0)
+            {
+                amount++;
+            }
         }
 
         return amount;
@@ -211,13 +214,18 @@ public class HashTable
         int average = 0, total = 0;
         int mode = 0;
 
-        for(Node bucket : this.nodes)
+        for(TeamLinkedList bucket : this.buckets)
         {
-            int bucketSize = 0;
-            while(bucket != null)
+            int bucketSize;
+            //buckets may be null
+            if(bucket == null)
             {
-                bucket = bucket.next;
-                bucketSize++;
+                bucketSize = 0;
+            }
+            else
+            {
+                bucketSize = bucket.getSize();
+
             }
 
             if(bucketSize > max)
@@ -233,20 +241,17 @@ public class HashTable
             total += bucketSize;
         }
 
-        double decimalAverage = (double) total / (double) this.nodes.length;
+        double decimalAverage = (double) total / (double) this.buckets.length;
         average = (int) (decimalAverage * 100);
 
         //to calculate mode, make an array of size max + 1, and increment where each bucket size occurs
         //then find the max value in the array, and the index of the max value is the mode
         int[] occuranceCount = new int[max + 1];
-        for(Node bucket : this.nodes)
+        for(TeamLinkedList bucket : this.buckets)
         {
-            int bucketSize = 0;
-            while(bucket != null)
-            {
-                bucket = bucket.next;
-                bucketSize++;
-            }
+            if(bucket == null) continue;
+
+            int bucketSize = bucket.getSize();
 
             occuranceCount[bucketSize]++;
         }
@@ -285,12 +290,14 @@ public class HashTable
     public HashSet<String> keySet() {
         HashSet<String> hashSet = new HashSet<String>();
 
-        //go through every node in this.nodes and then go through the chain
-        for(Node n : this.nodes) {
+        //go through every list in this.buckets
+        for(TeamLinkedList list : this.buckets) {
 
-            while (n != null) {
-                hashSet.add(n.getString());
-                n = n.getNext();
+            if(list == null) continue;
+
+            for(int i = 0; i < list.getSize(); i++)
+            {
+                hashSet.add(list.getString(i));
             }
         }
 
@@ -305,11 +312,12 @@ public class HashTable
     public LinkedList<AtomicInteger> values() {
         LinkedList<AtomicInteger> linkedList = new LinkedList<AtomicInteger>();
 
-        for (Node n : this.nodes) {
+        //go through every list in this.buckets
+        for(TeamLinkedList list : this.buckets) {
 
-            while (n != null) {
-                linkedList.add(n.getInteger());
-                n = n.getNext();
+            for(int i = 0; i < list.getSize(); i++)
+            {
+                linkedList.add(list.getInteger(i));
             }
         }
 
@@ -320,7 +328,7 @@ public class HashTable
      * Clears the HashMap.
      */
     public void clear() {
-        nodes = new Node[nodes.length];
+        this.buckets = new TeamLinkedList[this.buckets.length];
         currentSize = 0;
     }
 
@@ -334,11 +342,11 @@ public class HashTable
         int[] bucketMetrics = this.getBucketStats(); //min max avg mode
 
         return "==============================" + "\n" +
-                "Number of buckets: " + this.nodes.length + "\n" +
+                "Number of buckets: " + this.buckets.length + "\n" +
                 "Table size: " + this.size() + "\n" +
                 "Load factor: " + this.getLoadFactor() + "\n" +
                 "Buckets in use: " + this.getBucketsInUse() + "\n" +
-                "Percentage of buckets in use: " + (((double)this.getBucketsInUse() / (double)this.nodes.length)) * 100 + "\n" +
+                "Percentage of buckets in use: " + (((double)this.getBucketsInUse() / (double)this.buckets.length)) * 100 + "\n" +
                 "Bucket min size: " + bucketMetrics[0] + "\n" +
                 "Bucket max size: " + bucketMetrics[1] + "\n" +
                 "Bucket average size: " + bucketMetrics[2] + "\n" +
@@ -361,44 +369,5 @@ public class HashTable
         }
 
         return hash;
-    }
-
-    private class Node
-    {
-        private String string;
-        private AtomicInteger integer;
-        private Node next;
-
-        public Node() {
-            next = null;
-            string = null;
-            integer = null;
-        }
-
-        public Node(String string, AtomicInteger integer)
-        {
-            this.string = string;
-            this.integer = integer;
-        }
-
-        public String getString()
-        {
-            return this.string;
-        }
-
-        public AtomicInteger getInteger()
-        {
-            return this.integer;
-        }
-
-        public Node getNext()
-        {
-            return this.next;
-        }
-
-        public void setNext(Node next)
-        {
-            this.next = next;
-        }
     }
 }
